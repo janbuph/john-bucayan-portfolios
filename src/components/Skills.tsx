@@ -12,7 +12,7 @@ const skillCategories = [
   },
   {
     category: "Frontend Frameworks",
-    skills: ["React", "Angular", "Blazor"],
+    skills: ["React", "Angular", "Blazor", "HTML", "CSS"],
   },
   {
     category: "Backend Frameworks",
