@@ -14,7 +14,9 @@ const Contact = () => {
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
@@ -34,11 +36,38 @@ const Contact = () => {
       return;
     }
 
-    toast({
-      title: "Message sent!",
-      description: "Thank you for reaching out. I'll get back to you soon.",
-    });
-    setFormData({ name: "", email: "", message: "" });
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          access_key: "1957f55d-30fe-42ee-9678-79a68d2ff703",
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        toast({
+          title: "Message sent!",
+          description: "Thank you for reaching out. I'll get back to you soon.",
+        });
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        throw new Error(result.message || "Failed to send message");
+      }
+    } catch (error) {
+      toast({
+        title: "Failed to send message",
+        description: "Please try again or email me directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -167,8 +196,9 @@ const Contact = () => {
                 variant="hero"
                 size="lg"
                 className="w-full"
+                disabled={isSubmitting}
               >
-                Send Message
+                {isSubmitting ? "Sending..." : "Send Message"}
                 <Send className="ml-1 w-4 h-4" />
               </Button>
             </form>
