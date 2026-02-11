@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { Zap, Code, BarChart3, Users } from "lucide-react";
+import myAvatar from "@/assets/myavatar.png";
 
 const stats = [
   { icon: Zap, value: "10+", label: "Years Experience" },
@@ -17,8 +18,22 @@ const About = () => {
   return (
     <section id="about" className="section-padding bg-background" ref={ref}>
       <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* Left - Text */}
+        <div className="grid lg:grid-cols-[auto_1fr_auto] gap-12 lg:gap-10 items-center">
+          {/* Avatar */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="flex justify-center lg:justify-start"
+          >
+            <img
+              src={myAvatar}
+              alt="John Bucayan"
+              className="w-48 h-48 sm:w-56 sm:h-56 lg:w-64 lg:h-64 rounded-full object-cover shadow-lg"
+            />
+          </motion.div>
+
+          {/* Text */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
